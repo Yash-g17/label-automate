@@ -6,13 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+    <link rel="stylesheet" href="label.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
     <script src="./davidshimjs-qrcodejs-04f46c6/qrcode.js"></script>
 </head>
 
 <body>
-    <button id="button">This is a button</button>
-    <div id="output"></div>
+    <nav class="navbar navbar-expand-lg bg-dark" id="navbar">
+        <h1>Label generator</h1>
+    </nav>
+    <div class="container" id="super-container">
+        <div id="form">
+            <input type="text" class="text-area">
+            <input type="text" class="text-area">
+            <input type="text" class="text-area">
+            <button id="button" class="btn btn-dark">Generate</button>
+        </div>
+        <div id="printable">
+            <p id="content"></p>
+            <span id="output">
+            </span>
+        </div>
+
+    </div>
     <script src="./qrcode-custom.js"></script>
 </body>
 
