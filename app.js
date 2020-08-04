@@ -1,31 +1,59 @@
 Tail = require("tail").Tail;
 const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
 const app = express();
+const dbService = require("./dbService");
+dotenv.config();
+
 tail = new Tail("./log");
 let a;
-tail.on("line", function (data) {
-  a = data;
-  console.log(data);
+tail.on("line", function(data) {
+    a = data;
+    console.log(data);
 });
 
-tail.on("error", function (error) {
-  console.log("ERROR: ", error);
+tail.on("error", function(error) {
+    console.log("ERROR: ", error);
 });
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
 
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
+app.use(cors());
+app.use(express.json());
 
-  next();
-});
 app.get("/api", (req, res) => {
-  console.log("output ==========>" + a);
-  res.send(a);
+    console.log("output ==========>" + a);
+    res.send(a);
 });
-const port = 3000;
-app.listen(port, () => {
-  console.log(`app listening on port ${port}`);
+
+app.get("/getall", (req, res) => {
+    const db = dbService.getDbServiceInstance();
+    const result = db.getAllData();
+    result
+        .then((data) =>
+            res.json({
+                data: data,
+            })
+        )
+        .catch((err) => console.log(err));
+    // res.json({
+    //   success: true,
+    // });
+});
+
+app.post("/insert", (request, response) => {
+    const { name } = request.body;
+    console.log("insert -> " + name);
+
+    const db = dbService.getDbServiceInstance();
+
+    const result = db.insertNewName(name);
+
+    result
+        .then((data) => response.json({ data: data }))
+        .catch((err) => console.log(err));
+});
+
+// const port = 3000;
+app.listen(process.env.PORT, () => {
+    console.log(`app listening on port ${process.env.PORT}`);
 });

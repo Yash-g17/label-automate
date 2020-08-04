@@ -10,8 +10,9 @@
     justify-content: center;
 }
 
-#button {
-    margin: 10px
+#print-button,
+#generate-button {
+    margin: 10px;
 }
 
 #super-container {
