@@ -9,6 +9,7 @@
         "express": "^4.17.1",
         "mysql": "^2.18.1",
         "read-last-lines": "^1.7.2",
+        "socket.io": "^2.3.0",
         "tail": "^2.0.4"
     },
     "devDependencies": {
