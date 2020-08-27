@@ -15,30 +15,28 @@ io.set("origins", "*:*");
 dotenv.config();
 app.use(cors());
 app.use(express.json());
-tailweight = new Tail("./weight");
-tailcode = new Tail("./code");
+
+const SerialPort = require("serialport");
+const port = new SerialPort("COM3", {
+    baudRate: 9600,
+});
+// serialPort.on("open", function() {
+//     console.log("open");
+//     serialPort.on("data", function(data) {
+//         console.log(data);
+//     });
+// });
 /////////////////////////////////////////////////////////////////
 //taking data from weight file and sending to browser when needed
 {
     io.sockets.on("connection", (socket) => {
         console.log("Socket connection established    " + socket.id);
-        // starting a new tail for weight file by weighing machine
-        // tailweight.watch();
-        tailweight.on("line", function(data) {
-            // console.log(a);
-            // console.log("weight==========>" + data);
-            socket.broadcast.emit("weight", data);
+        // Switches the port into "flowing mode"
+        port.on("data", function(data) {
+            socket.broadcast.emit("weight", data.toString("utf8"));
+            console.log("Data2:", data.toString("utf8"));
         });
-        tailweight.on("error", function(error) {
-            console.log("ERROR: ", error);
-        });
-        tailcode.on("line", function(data) {
-            // console.log("code =======>" + data);
-            socket.broadcast.emit("code", data);
-        });
-        tailcode.on("error", (data) => {
-            console.log(data);
-        });
+        // socket.broadcast.emit("code", data);
         socket.on("generate", () => {
             console.log("Generate command recieved");
         });
