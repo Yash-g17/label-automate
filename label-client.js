@@ -7,11 +7,7 @@ let qrcode = new QRCode("output", {
     correctLevel: QRCode.CorrectLevel.H,
 });
 
-/////////socket to retrieve incoming data from node application
-// console.log("here");
-var socket = io.connect("http://localhost:5000");
-// console.log("hello");
-{
+var socket = io.connect("http://localhost:5000"); {
     socket.on("weight", (data) => {
         console.log("weight recieved" + data);
         if (data != null) {
@@ -20,19 +16,18 @@ var socket = io.connect("http://localhost:5000");
     });
     socket.on("code", (data) => {
         console.log("code recieved" + data);
-
         document.querySelector("#text-2").innerHTML = data;
     });
-    // socket.on("id", (data) => {
-    //     console.log(data);
-    // });
 }
 socket.on("connect", () => {
     document.getElementById("generate-button").addEventListener("click", () => {
         // let d = document.querySelector("#weight").nodeValue;
         console.log(document.getElementById("text-1").textContent);
 
-        let str = document.getElementById("text-1").textContent;
+        let str = `{ 
+              weight : ${document.getElementById("text-1").textContent}},
+              product-type :${document.getElementById("text-2").textContent}
+              `;
         qrcode.clear(); // clear the code.
         qrcode.makeCode(str); // make another code.
 
@@ -43,22 +38,28 @@ socket.on("connect", () => {
 });
 
 function httpPost(theUrl) {
-    const nameInput = document.querySelector("#text-1");
-    const name = String(nameInput.value);
-    console.log(name);
+    const weight = document.querySelector("#text-1");
+    const product_id = document.querySelector("#text-2");
+    const weight_string = String(weight.value);
+    const product_id_string = String(product_id.value);
+    // console.log(name);
     let data = {
-        name: name,
+        productid: product_id_string,
+        weight: weight_string,
     };
-    nameInput.value = "";
+    product_id.value = "";
+    weight.value = "";
     console.log("data =========== " + JSON.stringify(data));
 
     fetch(theUrl, {
-        headers: {
-            "Content-type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(data),
-    }).then((response) => console.log(response));
+            headers: {
+                "Content-type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify(data),
+        })
+        .then((response) => response.text())
+        .then((data) => console.log(data));
 }
 
 document.getElementById("print-button").addEventListener("click", () => {

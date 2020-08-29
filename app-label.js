@@ -1,4 +1,3 @@
-Tail = require("tail").Tail;
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -17,7 +16,10 @@ app.use(cors());
 app.use(express.json());
 
 const SerialPort = require("serialport");
-const port = new SerialPort("COM3", {
+const port1 = new SerialPort("COM4", {
+    baudRate: 9600,
+});
+const port2 = new SerialPort("COM3", {
     baudRate: 9600,
 });
 // serialPort.on("open", function() {
@@ -32,26 +34,19 @@ const port = new SerialPort("COM3", {
     io.sockets.on("connection", (socket) => {
         console.log("Socket connection established    " + socket.id);
         // Switches the port into "flowing mode"
-        port.on("data", function(data) {
+        port1.on("data", function(data) {
             socket.broadcast.emit("weight", data.toString("utf8"));
             console.log("Data2:", data.toString("utf8"));
+        });
+        port2.on("data", function(data) {
+            socket.broadcast.emit("code", data.toString("utf8"));
+            console.log("Data1:", data.toString("utf8"));
         });
         // socket.broadcast.emit("code", data);
         socket.on("generate", () => {
             console.log("Generate command recieved");
         });
     });
-    // io.sockets.on("connection", (socket) => {
-    //     console.log("connection established for id");
-
-    //     socket.broadcast.emit("id", "hello world");
-    // });
-    //Takes weight from tail and sends to the browser
-    // app.get("/api", (req, res) => {
-    //     // a = TailFile("./log");
-    //     console.log("output ==========>" + a);
-    //     res.send(a);
-    // });
 }
 ////////////////////////////////////////////////////////////////////
 
@@ -71,16 +66,14 @@ const port = new SerialPort("COM3", {
 // });
 
 app.post("/insert", (request, response) => {
-    const { name } = request.body;
-    console.log("insert -> " + name);
+    const { weight } = request.body;
+    const { productid } = request.body;
+    console.log("insert -> " + weight + " " + productid);
 
     const db = dbService.getDbServiceInstance();
 
-    const result = db.insertNewName(name);
-
+    const result = db.insertNewProduct(weight, productid);
     result
-        .then((data) => response.json({ data: data }))
-        .catch((err) => console.log(err));
+        .then((data) => response.json(data))
+        .catch((err) => console.log("error" + err));
 });
-
-// const port = 3000;
