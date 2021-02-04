@@ -58,7 +58,7 @@ class DbService {
             const dateAdded = new Date();
             const insertId = await new Promise((resolve, reject) => {
                 const query =
-                    "INSERT INTO names (name,date_added,weight,status) VALUES (?,?,?,?)";
+                    "INSERT INTO names (product_code,date_added,weight,status) VALUES (?,?,?,?)";
                 connection.query(
                     query, [prod_code, dateAdded, prod_weight, 1],
                     (err, result) => {
@@ -67,7 +67,7 @@ class DbService {
                     }
                 );
             });
-            console.log(insertId);
+            // console.log(insertId);
             return insertId;
         } catch (err) {
             console.log(err);

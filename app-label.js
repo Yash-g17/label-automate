@@ -72,8 +72,12 @@ app.post("/insert", (request, response) => {
 
     const db = dbService.getDbServiceInstance();
 
-    const result = db.insertNewProduct(weight, productid);
+    const result = db.insertNewProduct(productid, weight);
+
     result
-        .then((data) => response.json(data))
+        .then((data) => {
+            console.log(data);
+            response.json(data);
+        })
         .catch((err) => console.log("error" + err));
 });

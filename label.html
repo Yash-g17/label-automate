@@ -10,32 +10,50 @@
     <link rel="stylesheet" href="label.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
     <script src="./davidshimjs-qrcodejs-04f46c6/qrcode.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@1,900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <link rel="shortcut icon" href="./bruh.jpg">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-dark" id="navbar">
-        <h1>Label generator</h1>
+    <nav class="navbar navbar-expand-lg " id="navbar">
+        <h1 id="navbar-font">Label generator</h1>
     </nav>
     <div class="container" id="super-container">
 
         <div id="form">
-            <p id="text-1"></p>
-            <p id="text-2"></p>
-            <!-- <input type="text" class="text-area" id="text-1"> -->
-            <!-- <input type="text" class="text-area" id="text-2"> -->
-            <input type="text" class="text-area" id="text-3">
-            <button id="generate-button" class="btn btn-dark">Generate</button>
-            <button id="print-button" class="btn btn-dark">Print</button>
+            <input type="text" class="text-area" id="text-1" placeholder="Weight" disabled>
+            <input type="text" class="text-area" id="text-2" placeholder="Product_Code" disabled>
+            <input type="text" class="text-area" id="text-3" placeholder="" disabled>
+            <button id="generate-button" class="btn btn-lg btn-dark">Generate</button>
+            <button id="print-button" class="btn btn-lg btn-dark">Print</button>
         </div>
         <div id="printable">
-            <p id="content"></p>
-            <span id="output">
-            </span>
+            <div class="datatable">
+                <span class="col1">Weight-</span>
+                <span id="weight"></span>
+                <span id="output1"></span>
+            </div>
+            <hr class="hr">
+            <div class="datatable">
+                <span class="col1">Product id-</span>
+                <span>ML12x2</span>
+            </div>
+            <hr class="hr">
+            <div class="datatable">
+                <span class="col1">Product Size-</span>
+                <span>12x2</span>
+            </div>
+            <hr class="hr">
+            <div class="datatable">
+                <span class="col1">Serial No-</span>
+                <span id="srno"></span>
+                <span id="output2"></span>
+            </div>
         </div>
 
     </div>
+    <br><br><br><br><br><br><br><br>
     <script src="./label-client.js "></script>
 </body>
 
