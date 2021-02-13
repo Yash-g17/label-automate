@@ -21,10 +21,18 @@ var socket = io.connect("http://localhost:5000"); {
         if (data != null) {
             document.querySelector("#text-1").value = data;
         }
+        if (document.querySelector("#text-2").value != null) {
+            document.getElementById("print-button").click();
+            document.getElementById("print-button").click();
+        }
     });
     socket.on("code", (data) => {
         console.log("code recieved" + data);
         document.getElementById("text-2").value = data;
+        if (document.querySelector("#text-1").value != null) {
+            document.getElementById("print-button").click();
+            document.getElementById("print-button").click();
+        }
     });
 }
 socket.on("connect", () => {
