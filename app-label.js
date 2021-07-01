@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 const SerialPort = require("serialport");
-const port1 = new SerialPort("COM4", {
+const port1 = new SerialPort("COM5", {
     baudRate: 9600,
 });
 const port2 = new SerialPort("COM3", {

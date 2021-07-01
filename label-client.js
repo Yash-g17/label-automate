@@ -1,16 +1,22 @@
 // var srno;
+function pause(milliseconds) {
+	var dt = new Date();
+	while ((new Date()) - dt <= milliseconds) { /* Do nothing */ }
+}
+var size1=75;
 let qrcode1 = new QRCode("output1", {
     text: "5",
-    width: 50,
-    height: 50,
+    width: size1,
+    height: size1,
     colorDark: "#000",
     colorLight: "#ffffff",
     correctLevel: QRCode.CorrectLevel.H,
 });
+var size2=85;
 let qrcode2 = new QRCode("output2", {
     text: "5",
-    width: 50,
-    height: 50,
+    width: size2,
+    height: size2,
     colorDark: "#000",
     colorLight: "#ffffff",
     correctLevel: QRCode.CorrectLevel.H,
@@ -21,26 +27,53 @@ var socket = io.connect("http://localhost:5000"); {
         if (data != null) {
             document.querySelector("#text-1").value = data;
         }
-        if (document.querySelector("#text-2").value != null) {
-            document.getElementById("print-button").click();
+        if (document.querySelector("#text-2").value != "") {
+            document.getElementById("generate-button").click();
             document.getElementById("print-button").click();
         }
     });
     socket.on("code", (data) => {
         console.log("code recieved" + data);
         document.getElementById("text-2").value = data;
-        if (document.querySelector("#text-1").value != null) {
-            document.getElementById("print-button").click();
+        if (document.querySelector("#text-1").value != "") {
+            document.getElementById("generate-button").click();
             document.getElementById("print-button").click();
         }
     });
 }
 socket.on("connect", () => {
+    document.getElementById("print-button").addEventListener("click", () => {
+        let srno = httpPost("http://127.0.0.1:5000/insert");
+        srno
+            .then((Response) => Response.text())
+            .then((data) => {
+                // document.querySelector("#srno").innerHTML = data;
+                qrcode2.clear();
+                qrcode2.makeCode(data);
+                setTimeout(() => {
+                    var printContents = document.getElementById("printable").innerHTML;
+                    var originalContents = document.body.innerHTML;
+                    document.body.innerHTML = printContents;
+                    window.print();
+                    pause(2000);
+                    window.print();
+                }, 50);
+            });
+            socket.disconnect();
+            setTimeout(function(){ location.reload() }, 3000);
+            
+    });
     document.getElementById("generate-button").addEventListener("click", () => {
         document.querySelector("#weight").innerHTML = document.getElementById(
             "text-1"
+        ).value+" kg";
+        document.querySelector("#prod_id").innerHTML = document.getElementById(
+            "text-2"
         ).value;
-
+        let words=document.querySelector("#prod_id").innerHTML;
+        var n = words.split(" ");
+        var prod_len=(parseInt((n[n.length - 1].substring(n[n.length - 1].lastIndexOf("X")+1)))*parseInt(document.querySelector("#weight").innerHTML));
+        document.querySelector("#prod_len").innerHTML=prod_len+"  mtr."
         let str = `{ 
               "weight" : "${document.getElementById("text-1").value}",
               "product_type" : "${document.getElementById("text-2").value}"
@@ -75,20 +108,3 @@ const httpPost = (theUrl) => {
     });
 };
 
-document.getElementById("print-button").addEventListener("click", () => {
-    let srno = httpPost("http://127.0.0.1:5000/insert");
-    srno
-        .then((Response) => Response.text())
-        .then((data) => {
-            document.querySelector("#srno").innerHTML = data;
-            qrcode2.clear();
-            qrcode2.makeCode(data);
-            setTimeout(() => {
-                var printContents = document.getElementById("printable").innerHTML;
-                var originalContents = document.body.innerHTML;
-                document.body.innerHTML = printContents;
-                window.print();
-                document.body.innerHTML = originalContents;
-            }, 50);
-        });
-});
