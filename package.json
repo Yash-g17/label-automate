@@ -10,7 +10,7 @@
         "mysql": "^2.18.1",
         "read-last-lines": "^1.8.0",
         "serialport": "^9.0.6",
-        "socket.io": "^2.4.0",
+        "socket.io": "^2.5.0",
         "tail": "^2.2.0"
     },
     "devDependencies": {
