@@ -14,7 +14,7 @@
         "tail": "^2.2.0"
     },
     "devDependencies": {
-        "nodemon": "^2.0.7"
+        "nodemon": "^2.0.20"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
